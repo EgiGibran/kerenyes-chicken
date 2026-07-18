@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Menu - Kerenyes Chicken</title>
+    
+    <!-- CSS & Framework -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        /* =========================================
+           VARIABLES
+           ========================================= */
+        :root {
+            --primary-color: #ffca28;
+            --dark-bg: #121212;
+            --dark-card: #1e1e1e;
+            --text-white: #ffffff;
+            --font-heading: 'Poppins', sans-serif;
+            --transition: all 0.3s ease;
+        }
+
+        body { 
+            font-family: var(--font-heading); 
+            background-color: var(--dark-bg); 
+            color: var(--text-white); 
+            overflow-x: hidden; 
+        }
+
+        /* --- Navbar Styles --- */
+        .navbar {
+            background-color: #000000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .navbar-brand { font-weight: 800; letter-spacing: 0.5px; }
+        .nav-link { font-size: 0.95rem; transition: color 0.3s; }
+        .nav-link:hover, .nav-link.active { color: var(--primary-color) !important; }
+        
+        .btn-pesan {
+            background-color: var(--primary-color);
+            color: #000;
+            border: none;
+            box-shadow: 0 0 15px rgba(255, 204, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        .btn-pesan:hover {
+            background-color: #e5b624;
+            box-shadow: 0 0 25px rgba(255, 204, 0, 0.5);
+            transform: translateY(-2px);
+        }
+        .cart-badge {
+            font-size: 0.6rem;
+            padding: 0.25em 0.5em;
+            background-color: var(--primary-color);
+            color: #000;
+        }
+
+        /* =========================================
+           HEADER PAGE
+           ========================================= */
+        .page-header {
+            padding: 160px 0 80px;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8), #121212), url('assets/img/hero-bg.jpg');
+            background-color: #050505; /* Fallback color */
+            background-size: cover;
+            background-position: center;
+            text-align: center;
+            position: relative;
+        }
+
+        /* =========================================
+           FILTER BAR (STICKY)
+           ========================================= */
+        .filter-bar {
+            position: sticky;
+            top: 76px; /* Jarak dari navbar */
+            z-index: 99;
+            background: rgba(18, 18, 18, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 40px;
+        }
+
+        .filter-btn {
+            background: transparent;
+            border: 1px solid #333;
+            color: #888;
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-weight: 600;
+            margin: 0 5px;
+            transition: var(--transition);
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--primary-color);
+            color: #000;
+            border-color: var(--primary-color);
+            box-shadow: 0 5px 15px rgba(255, 202, 40, 0.3);
+        }
+
+        /* =========================================
+           PRODUCT CARD
+           ========================================= */
+        .menu-card {
+            background: var(--dark-card);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: var(--transition);
+            height: 100%;
+            position: relative;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary-color);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .card-img-wrap {
+            height: 200px;
+            background: #151515;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        .card-img-wrap img {
+            max-width: 80%;
+            max-height: 80%;
+            object-fit: contain;
+            transition: var(--transition);
+            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.5));
+        }
+
+        .menu-card:hover .card-img-wrap img {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .card-body { padding: 25px; }
+
+        .menu-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-white);
+            margin-bottom: 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .menu-desc {
+            color: #888;
+            font-size: 0.9rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            height: 40px;
+            margin-bottom: 20px;
+        }
+
+        .menu-price {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--primary-color);
+        }
+
+        .btn-cart-icon {
+            width: 45px; height: 45px;
+            border-radius: 50%;
+            background: rgba(255, 202, 40, 0.1);
+            color: var(--primary-color);
+            border: none;
+            display: flex; align-items: center; justify-content: center;
+            transition: var(--transition);
+        }
+
+        .btn-cart-icon:hover {
+            background: var(--primary-color);
+            color: #000;
+            transform: rotate(90deg);
+        }
+
+        /* Animasi Hide/Show Filter */
+        .menu-item { transition: all 0.4s ease; }
+        .menu-item.hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark py-3 sticky-top">
+        <div class="container">
+            <a class="navbar-brand text-white" href="#">
+                KERENYES<span style="color: var(--primary-color);">CHICKEN</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto gap-lg-4 fw-semibold">
+                    <li class="nav-item"><a class="nav-link text-white" href="home.html">Beranda</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="about.html">Tentang</a></li>
+                    <li class="nav-item"><a class="nav-link text-white active" href="menu.html">Menu</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="contact.html">Kontak</a></li>
+                </ul>
+                <div class="d-flex align-items-center gap-4 mt-3 mt-lg-0">
+                    <a href="login.html" class="text-decoration-none fw-bold" style="color: var(--primary-color); font-size: 0.95rem;">Login / Daftar</a>
+                    <a href="#" class="text-white fs-5"><i class="fas fa-bell"></i></a>
+                    <a href="#" class="text-white fs-5 position-relative">
+                        <i class="fas fa-shopping-basket"></i>
+                        <span id="cartCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill cart-badge">0</span>
+                    </a>
+                    <a href="#menu-section" class="btn btn-pesan rounded-pill px-4 py-2 fw-bold ms-2">PESAN SEKARANG</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Page -->
+    <section class="page-header">
+        <div class="container" data-aos="fade-up">
+            <h1 class="display-4 fw-bold text-white">DAFTAR MENU</h1>
+            <p class="text-secondary lead">Temukan kelezatan favoritmu dari makanan hingga minuman segar</p>
+        </div>
+    </section>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+        <div class="container">
+            <div class="d-flex justify-content-center overflow-auto pb-2" style="gap: 10px;">
+                <button class="filter-btn active" onclick="filterMenu('all')">Semua</button>
+                <button class="filter-btn" onclick="filterMenu('cat-1')">Makanan Utama</button>
+                <button class="filter-btn" onclick="filterMenu('cat-2')">Minuman Segar</button>
+                <button class="filter-btn" onclick="filterMenu('cat-3')">Snack & Dessert</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menu Section -->
+    <section class="py-5" style="background-color: var(--dark-bg); min-height: 60vh;">
+        <div class="container">
+            <div class="row g-4" id="menuContainer">
+                
+                <!-- Produk 1 (cat-1) -->
+                <div class="col-6 col-md-4 col-lg-3 menu-item cat-1" data-aos="fade-up" data-aos-delay="100">
+                    <div class="menu-card h-100">
+                        <div class="card-img-wrap">
+                            <img src="assets/img/menu1.jpg" 
+                                 onerror="this.src='https://freepngimg.com/thumb/fried_chicken/5-2-fried-chicken-png-image.png'" 
+                                 alt="Ayam Original Krenyes">
+                            <span class="position-absolute top-0 start-0 m-3 badge bg-dark border border-warning text-warning">
+                                Makanan Utama
+                            </span>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="menu-title">Ayam Original Krenyes</h5>
+                            <p class="menu-desc">Ayam goreng original dengan bumbu rempah pilihan yang meresap sempurna.</p>
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <span class="menu-price">Rp 13.500</span>
+                                <button class="btn-cart-icon" onclick="addToCart(1, 'Ayam Original Krenyes', 13500)">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Produk 2 (cat-1) -->
+                <div class="col-6 col-md-4 col-lg-3 menu-item cat-1" data-aos="fade-up" data-aos-delay="200">
+                    <div class="menu-card h-100">
+                        <div class="card-img-wrap">
+                            <img src="assets/img/menu2.jpg" 
+                                 onerror="this.src='https://freepngimg.com/thumb/fried_chicken/5-2-fried-chicken-png-image.png'" 
+                                 alt="Krenyes Geprek Cihuy">
+                            <span class="position-absolute top-0 start-0 m-3 badge bg-dark border border-warning text-warning">
+                                Makanan Utama
+                            </span>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="menu-title">Krenyes Geprek Cihuy</h5>
+                            <p class="menu-desc">Ayam Crispy yang di geprek dengan sambal bawang super pedas nampol.</p>
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <span class="menu-price">Rp 17.000</span>
+                                <button class="btn-cart-icon" onclick="addToCart(2, 'Krenyes Geprek Cihuy', 17000)">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Produk 3 (cat-3) -->
+                <div class="col-6 col-md-4 col-lg-3 menu-item cat-3" data-aos="fade-up" data-aos-delay="300">
+                    <div class="menu-card h-100">
+                        <div class="card-img-wrap">
+                            <img src="assets/img/menu3.jpg" 
+                                 onerror="this.src='https://freepngimg.com/thumb/fried_chicken/5-2-fried-chicken-png-image.png'" 
+                                 alt="Pisang Goreng Kipas">
+                            <span class="position-absolute top-0 start-0 m-3 badge bg-dark border border-warning text-warning">
+                                Snack & Dessert
+                            </span>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="menu-title">Pisang Goreng Kipas</h5>
+                            <p class="menu-desc">Pisang Goreng kipas dengan rasa yang manis legit dan tekstur renyah.</p>
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <span class="menu-price">Rp 10.000</span>
+                                <button class="btn-cart-icon" onclick="addToCart(3, 'Pisang Goreng Kipas', 10000)">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Produk 4 (cat-2) -->
+                <div class="col-6 col-md-4 col-lg-3 menu-item cat-2" data-aos="fade-up" data-aos-delay="400">
+                    <div class="menu-card h-100">
+                        <div class="card-img-wrap">
+                            <img src="assets/img/menu4.jpg" 
+                                 onerror="this.src='https://freepngimg.com/thumb/fried_chicken/5-2-fried-chicken-png-image.png'" 
+                                 alt="Es Teh Manis">
+                            <span class="position-absolute top-0 start-0 m-3 badge bg-dark border border-warning text-warning">
+                                Minuman Segar
+                            </span>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="menu-title">Es Teh Manis</h5>
+                            <p class="menu-desc">Minuman menyegarkan dengan rasa teh asli pilihan yang diseduh sempurna.</p>
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <span class="menu-price">Rp 7.000</span>
+                                <button class="btn-cart-icon" onclick="addToCart(4, 'Es Teh Manis', 7000)">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-4 text-center" style="background-color: #050505; border-top: 1px solid #1a1a1a;">
+        <p class="text-secondary mb-0">&copy; 2026 Kerenyes Chicken. All Rights Reserved.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <script>
+        AOS.init({ once: true, duration: 800 });
+        
+        let totalCartItems = 0;
+
+        // FUNGSI 1: Simulasi Add To Cart (Disesuaikan untuk Frontend HTML murni)
+        function addToCart(id, name, price) {
+            totalCartItems++;
+            
+            // 1. Update Angka di Navbar (Badge)
+            const badge = document.getElementById('cartCount');
+            if(badge) {
+                badge.innerText = totalCartItems;
+                
+                // Tambahkan animasi pulse sederhana pakai JS
+                badge.style.transform = "scale(1.5)";
+                setTimeout(() => { badge.style.transform = "scale(1)"; }, 200);
+            }
+            
+            // 2. Munculkan Alert Sukses
+            alert(name + " berhasil masuk keranjang statis!\nTotal produk saat ini: " + totalCartItems);
+        }
+
+        // FUNGSI 2: Filter Menu (Logic Utama tetap dipertahankan)
+        function filterMenu(category) {
+            // A. Update Tombol Active
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('onclick').includes(category)) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // B. Filter Kartu Produk
+            const items = document.querySelectorAll('.menu-item');
+            items.forEach(item => {
+                if (category === 'all') {
+                    item.classList.remove('hidden');
+                    item.setAttribute('data-aos', 'fade-up');
+                } else {
+                    if (item.classList.contains(category)) {
+                        item.classList.remove('hidden');
+                        item.setAttribute('data-aos', 'zoom-in');
+                    } else {
+                        item.classList.add('hidden');
+                    }
+                }
+            });
+
+            // Refresh AOS agar animasi card yang baru muncul berjalan lancar
+            setTimeout(() => { AOS.refresh(); }, 100);
+        }
+
+        // FUNGSI 3: Cek URL saat Halaman Dimuat (Cek parameter ?category=)
+        document.addEventListener("DOMContentLoaded", function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const categoryParam = urlParams.get('category');
+
+            if (categoryParam) {
+                filterMenu(categoryParam);
+                
+                const filterBar = document.querySelector('.filter-bar');
+                if(filterBar) {
+                    // Beri jeda sebentar sebelum scroll
+                    setTimeout(() => {
+                        filterBar.scrollIntoView({ behavior: 'smooth' });
+                    }, 500);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
